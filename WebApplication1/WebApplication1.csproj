@@ -67,12 +67,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TesteBolsista.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web\Formulario.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Bolsista.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TesteBolsista.aspx.cs">
+      <DependentUpon>TesteBolsista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TesteBolsista.aspx.designer.cs">
+      <DependentUpon>TesteBolsista.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
