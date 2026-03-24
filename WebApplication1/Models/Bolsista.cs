@@ -17,29 +17,5 @@ namespace WebApplication1.Models
         // TODO: Criar a propriedade para a Data de Nascimento
 
         // TODO: Criar a propriedade para o Sexo
-
-        // TODO: Criar método com o resumo das informações contendo nome e matrícula
-
-        //TODO: Criar método que calcúla a idade do bolsista
-
-        public string CPF { get; set; }
-
-        public string Matricula { get; set; }
-
-        public DateTime DataNascimento { get; set; }
-
-        public string Sexo { get; set; }
-
-        public string ObterResumo()
-        {
-            return $"Bolsista: {Nome} (Matrícula: {Matricula})";
-        }
-
-        public int CalcularIdade()
-        {
-            int idade = DateTime.Now.Year - DataNascimento.Year;
-            return idade;
-        }
-
     }
 }
