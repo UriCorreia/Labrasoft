@@ -1,4 +1,17 @@
+# Pastas de compilação e caches (O essencial)
 .vs/
 [Bb]in/
 [Oo]bj/
+
+# Arquivos de usuário (onde o VS salva qual arquivo o aluno deixou aberto)
 *.user
+*.userosscache
+*.suo
+
+# Backup e temporários do Windows/Office
+$RECYCLE.BIN/
+Thumbs.db
+Desktop.ini
+
+# Se eles usarem pacotes NuGet no futuro
+packages/
