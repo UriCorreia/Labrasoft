@@ -17,5 +17,10 @@ namespace WebApplication1.Models
         // TODO: Criar a propriedade para a Data de Nascimento
 
         // TODO: Criar a propriedade para o Sexo
+
+        // TODO: Criar método para mostrar resumo do bolsista com nome e matrícula
+
+        // TODO: Criar método que calcula a idade do bolsista
+
     }
 }
