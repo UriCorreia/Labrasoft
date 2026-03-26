@@ -46,6 +46,23 @@
                 <div class="d-grid gap-2">
                     <asp:Button ID="btnSalvar" runat="server" Text="Salvar e Processar Cadastro" 
                         CssClass="btn btn-success btn-lg w-100" OnClick="btnSalvar_Click" />
+                    <asp:Button ID="btnLimpar" runat="server" Text="Limpar Campos" 
+                        CssClass="mt-2 btn btn-outline-secondary btn-lg btn-block" OnClick="btnLimpar_Click" />
+
+                </div>
+                <hr />
+                <div class="mt-5">
+                    <h3 class="text-secondary">📋 Lista de Bolsistas Cadastrados</h3>
+    
+                    <asp:GridView ID="gridBolsistas" runat="server" 
+                        CssClass="table table-hover table-striped border" 
+                        AutoGenerateColumns="true" 
+                        GridLines="None">
+                        <HeaderStyle CssClass="thead-dark" />
+                    </asp:GridView>
+
+                    <asp:Label ID="lblAvisoGrid" runat="server" Text="Nenhum bolsista na memória." 
+                        CssClass="text-muted italic" Visible="false"></asp:Label>
                 </div>
 
                 <div class="mt-4 text-center">
