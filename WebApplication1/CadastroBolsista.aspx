@@ -32,6 +32,17 @@
                     <asp:TextBox ID="txtDataNasc" runat="server" TextMode="Date" CssClass="form-control"></asp:TextBox>
                 </div>
 
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-bold">Sexo:</label>
+                    <asp:DropDownList ID="ddlSexo" runat="server" CssClass="form-control">
+                        <asp:ListItem Text="Selecione..." Value="" />
+                        <asp:ListItem Text="Masculino" Value="M" />
+                        <asp:ListItem Text="Feminino" Value="F" />
+                        <asp:ListItem Text="Outro" Value="O" />
+                    </asp:DropDownList>
+                </div>
+
+
                 <div class="d-grid gap-2">
                     <asp:Button ID="btnSalvar" runat="server" Text="Salvar e Processar Cadastro" 
                         CssClass="btn btn-success btn-lg w-100" OnClick="btnSalvar_Click" />
