@@ -19,6 +19,17 @@ namespace WebApplication1
 
         protected void btnSalvar_Click(object sender, EventArgs e)
         {
+            // VERIFICAÇÃO DE SEGURANÇA: Se campos básicos estiverem vazios, para aqui.
+            if (string.IsNullOrWhiteSpace(txtNome.Text) ||
+            string.IsNullOrWhiteSpace(txtMatricula.Text) ||
+            string.IsNullOrWhiteSpace(txtCPF.Text) ||
+            string.IsNullOrWhiteSpace(txtDataNasc.Text) ||
+            ddlSexo.SelectedIndex <= 0)
+            {
+                lblMensagem.Text = "⚠️ Por favor, preencha todos os campos corretamente antes de salvar.";
+                lblMensagem.CssClass = "alert alert-warning d-block";
+                return;
+            }
             try
             {
                 // 1. Instanciar e preencher o objeto (conforme você já fez)
@@ -57,7 +68,6 @@ namespace WebApplication1
             lblMensagem.CssClass = "";
         }
 
-
         private void LimparCampos()
         {
             txtNome.Text = "";
@@ -87,8 +97,5 @@ namespace WebApplication1
                 gridBolsistas.Visible = false;
             }
         }
-
-
-
     }
 }
