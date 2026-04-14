@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WebApplication1.Models; // Garante que o C# ache sua classe
 
 namespace WebApplication1
@@ -39,6 +40,16 @@ namespace WebApplication1
                 novo.CPF = txtCPF.Text;
                 novo.Sexo = ddlSexo.SelectedValue;
                 novo.DataNascimento = DateTime.Parse(txtDataNasc.Text);
+
+                //1.5 Lógica provisória para não cadastrar o mesmo usuário duas vezes
+                if (listaBolsistas.Any(b => b.CPF == txtCPF.Text))
+                {
+                    lblMensagem.Text = "⚠️ Este bolsista já foi cadastrado!";
+                    lblMensagem.CssClass = "alert alert-warning d-block";
+                    LimparCampos();
+                    AtualizarGrid();
+                    return; // Para a execução aqui
+                }
 
                 // 2. ADICIONAR NA LISTA ESTÁTICA
                 listaBolsistas.Add(novo);
