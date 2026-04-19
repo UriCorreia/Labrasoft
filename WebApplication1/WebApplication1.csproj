@@ -67,18 +67,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BolsistaExemplo.aspx" />
+    <Content Include="Index.aspx" />
     <Content Include="CadastroBolsista.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web\Formulario.html" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BolsistaExemplo.aspx.cs">
-      <DependentUpon>BolsistaExemplo.aspx</DependentUpon>
+    <Compile Include="Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="BolsistaExemplo.aspx.designer.cs">
-      <DependentUpon>BolsistaExemplo.aspx</DependentUpon>
+    <Compile Include="Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="CadastroBolsista.aspx.cs">
       <DependentUpon>CadastroBolsista.aspx</DependentUpon>
