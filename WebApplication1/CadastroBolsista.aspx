@@ -49,12 +49,14 @@
                     <asp:Button ID="btnLimpar" runat="server" Text="Limpar Campos" 
                         CssClass="mt-2 btn btn-outline-secondary btn-lg btn-block" OnClick="btnLimpar_Click" />
                     <div>
-                        <asp:Button ID="btnOrdenar" runat="server" Text="Ordenar por nome"
-                            CssClass="mt-2 btn btn-info btn-lg w-100" OnClick="btnOrdenar_Click" />
-                        <asp:Button ID="btnFiltrar" runat="server" Text="Filtrar Mulheres"
-                            CssClass="mt-2 btn btn-warning btn-lg w-100" OnClick="btnFiltrar_Click" />
-                        <asp:Button ID="btnLimparFiltros" runat="server" Text="Limpar filtros"
-                            CssClass="mt-2 btn btn-outline-dark btn-lg w-100" OnClick="btnLimparFiltros_Click" />
+                        <asp:Panel ID="pnlFilftros" runat="server" visible="false">
+                            <asp:Button ID="btnOrdenar" runat="server" Text="Ordenar por nome"
+                                CssClass="mt-2 btn btn-info btn-lg w-100" OnClick="btnOrdenar_Click" />
+                            <asp:Button ID="btnFiltrar" runat="server" Text="Filtrar Mulheres"
+                                CssClass="mt-2 btn btn-warning btn-lg w-100" OnClick="btnFiltrar_Click" />
+                            <asp:Button ID="btnLimparFiltros" runat="server" Text="Limpar filtros"
+                                CssClass="mt-2 btn btn-outline-dark btn-lg w-100" OnClick="btnLimparFiltros_Click" />
+                        </asp:Panel>                       
                     </div>
 
                 </div>
