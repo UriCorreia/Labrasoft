@@ -56,6 +56,17 @@
                                 CssClass="mt-2 btn btn-warning btn-lg w-100" OnClick="btnFiltrar_Click" />
                             <asp:Button ID="btnLimparFiltros" runat="server" Text="Limpar filtros"
                                 CssClass="mt-2 btn btn-outline-dark btn-lg w-100" OnClick="btnLimparFiltros_Click" />
+
+                            <div class="col-md-6 form-group mb-3 align-items-center">
+                                <asp:Label ID="lblPesquisa" runat="server" class="form-label font-weight-bold">Barra de Pesquisa</asp:Label>
+                                <div class="row input-group" >
+                                    <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Pesquise por Nome"></asp:TextBox>
+                                    <asp:LinkButton ID="lbtnPesquisa" runat="server" Text="Pesquisar" 
+                                        CssClass="btn btn-primary " OnClick="btnPesquisar_Click">
+                                        <i>🔍</i>
+                                    </asp:LinkButton>
+                                </div>
+                            </div>
                         </asp:Panel>                       
                     </div>
 
@@ -67,7 +78,8 @@
                     <asp:GridView ID="gridBolsistas" runat="server" 
                         CssClass="table table-hover table-striped border" 
                         AutoGenerateColumns="true" 
-                        GridLines="None">
+                        GridLines="None"
+                        >
                         <HeaderStyle CssClass="thead-dark" />
                     </asp:GridView>
 

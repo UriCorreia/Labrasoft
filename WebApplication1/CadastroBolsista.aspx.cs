@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
 using WebApplication1.Models; // Garante que o C# ache sua classe
 
 namespace WebApplication1
@@ -121,6 +122,17 @@ namespace WebApplication1
             }
         }
 
+        //protected void gridBolsistas_RowDataBound(object sender, GridViewRowEventArgs e)
+        //{
+        //    if(e.Row.RowType == DataControlRowType.DataRow)
+        //    {
+        //        foreach(TableCell cell in e.Row.Cells)
+        //        {
+        //            cell.CssClass = "text-nowrap";
+        //        }
+        //    }
+        //}
+
         protected void btnOrdenar_Click(object sender, EventArgs e)
         {
             listaBolsistas = listaBolsistas.OrderBy(x => x.Nome).ToList();
@@ -130,13 +142,58 @@ namespace WebApplication1
         protected void btnFiltrar_Click(object sender, EventArgs e)
         {
             var filtrados = listaBolsistas.Where(x => x.Sexo == "F").ToList();
+
             gridBolsistas.DataSource = filtrados;
             gridBolsistas.DataBind();
+
+            if (filtrados.Count == 0)
+            {
+                lblAvisoGrid.Text = "Nenhuma Bolsista encontrada!";
+                lblAvisoGrid.Visible = true;
+                lblMensagem.Visible = false;
+            }
+            else
+            {
+                lblAvisoGrid.Visible = false;
+                lblMensagem.Visible = false;
+            }
         }
 
         protected void btnLimparFiltros_Click(object sender, EventArgs e)
         {
+            txtPesquisa.Text = "";
+
             AtualizarGrid();
         }
+        protected void btnPesquisar_Click(object sender, EventArgs e)
+        {
+            string pesquisado = txtPesquisa.Text;
+
+            if (string.IsNullOrEmpty(pesquisado))
+            {
+                AtualizarGrid();
+                return;
+            }
+
+            var encontrados = listaBolsistas
+                .Where(x => x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ToList();
+
+            gridBolsistas.DataSource = encontrados;
+            gridBolsistas.DataBind();
+
+            if(encontrados.Count == 0)
+            {
+                lblAvisoGrid.Text = "Nenhum Bolsista encontrado!";
+                lblAvisoGrid.Visible = true;
+                lblMensagem.Visible = false;
+            }
+            else
+            {
+                lblAvisoGrid.Visible = false;
+                lblMensagem.Visible = false;
+            }
+        }
+
     }
 }
