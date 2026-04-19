@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.Web.UI;
 using System.Web.UI.WebControls;
-using WebApplication1.Models; // Garante que o C# ache sua classe
+using WebApplication1.Models; 
 
 namespace WebApplication1
 {
-    public partial class CadastroBolsista : System.Web.UI.Page
+    public partial class CadastroCoordenador : System.Web.UI.Page
     {
-
-        private static List<Bolsista> listaBolsistas = new List<Bolsista>()
+        public static List<Coordenador> listaCoordenadores = new List<Coordenador>()
         {
-            new Bolsista { Nome = "Ana Beatriz Silva", CPF = "123.456.789-00", Matricula = "2023001", DataNascimento = new DateTime(2002, 5, 15), Sexo = "F" },
-            new Bolsista { Nome = "Carlos Eduardo Souza", CPF = "234.567.890-11", Matricula = "2023002", DataNascimento = new DateTime(2001, 10, 20), Sexo = "M" },
-            new Bolsista { Nome = "Mariana Oliveira", CPF = "345.678.901-22", Matricula = "2023003", DataNascimento = new DateTime(2003, 3, 12), Sexo = "F" },
-            new Bolsista { Nome = "Ricardo Pereira", CPF = "456.789.012-33", Matricula = "2023004", DataNascimento = new DateTime(2000, 12, 05), Sexo = "M" },
-            new Bolsista { Nome = "Fernanda Costa", CPF = "567.890.123-44", Matricula = "2023005", DataNascimento = new DateTime(2004, 07, 28), Sexo = "F" },
-            new Bolsista { Nome = "Gabriel Martins", CPF = "678.901.234-55", Matricula = "2023006", DataNascimento = new DateTime(1999, 01, 30), Sexo = "M" },
-            new Bolsista { Nome = "Juliana Almeida", CPF = "789.012.345-66", Matricula = "2023007", DataNascimento = new DateTime(2002, 09, 14), Sexo = "F" },
-            new Bolsista { Nome = "Lucas Henrique Lima", CPF = "890.123.456-77", Matricula = "2023008", DataNascimento = new DateTime(2001, 04, 02), Sexo = "M" }
+            new Coordenador { Nome = "Ricardo Aris", Titulo = "Doutor", CPF = "111.222.333-44", AreaAtuacao = "Engenharia de Software", Email = "ricardo.aris@universidade.edu" },
+            new Coordenador { Nome = "Maria Oliveira", Titulo = "Doutora", CPF = "555.666.777-88", AreaAtuacao = "Inteligência Artificial", Email = "maria.ai@universidade.edu" },
+            new Coordenador { Nome = "Carlos Santos", Titulo = "Mestre", CPF = "999.888.777-66", AreaAtuacao = "Banco de Dados", Email = "carlos.santos@universidade.edu" },
+            new Coordenador { Nome = "Fernanda Lima", Titulo = "Doutora", CPF = "123.456.789-00", AreaAtuacao = "Sistemas Distribuídos", Email = "fernanda.lima@universidade.edu" },
+            new Coordenador { Nome = "Roberto Souza", Titulo = "Mestre", CPF = "444.333.222-11", AreaAtuacao = "Segurança da Informação", Email = "roberto.seg@universidade.edu" }
         };
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -31,12 +29,11 @@ namespace WebApplication1
 
         protected void btnSalvar_Click(object sender, EventArgs e)
         {
-            // VERIFICAÇÃO DE SEGURANÇA: Se campos básicos estiverem vazios, para aqui.
             if (string.IsNullOrWhiteSpace(txtNome.Text) ||
-            string.IsNullOrWhiteSpace(txtMatricula.Text) ||
+            string.IsNullOrWhiteSpace(txtTitulo.Text) ||
             string.IsNullOrWhiteSpace(txtCPF.Text) ||
-            string.IsNullOrWhiteSpace(txtDataNasc.Text) ||
-            ddlSexo.SelectedIndex <= 0)
+            string.IsNullOrWhiteSpace(txtAreaAtuacao.Text) ||
+            string.IsNullOrWhiteSpace(txtEmail.Text))
             {
                 lblMensagem.Text = "⚠️ Por favor, preencha todos os campos corretamente antes de salvar.";
                 lblMensagem.CssClass = "alert alert-warning d-block";
@@ -45,34 +42,30 @@ namespace WebApplication1
             try
             {
                 // 1. Instanciar e preencher o objeto (conforme você já fez)
-                Bolsista novo = new Bolsista();
+                Coordenador novo = new Coordenador();
                 novo.Nome = txtNome.Text;
-                novo.Matricula = txtMatricula.Text;
+                novo.Titulo = txtTitulo.Text;
                 novo.CPF = txtCPF.Text;
-                novo.Sexo = ddlSexo.SelectedValue;
-                novo.DataNascimento = DateTime.Parse(txtDataNasc.Text);
+                novo.AreaAtuacao = txtAreaAtuacao.Text;
+                novo.Email = txtEmail.Text;
 
                 //1.5 Lógica provisória para não cadastrar o mesmo usuário duas vezes
-                if (listaBolsistas.Any(b => b.CPF == txtCPF.Text))
+                if (listaCoordenadores.Any(b => b.CPF == txtCPF.Text))
                 {
-                    lblMensagem.Text = "⚠️ Este bolsista já foi cadastrado!";
+                    lblMensagem.Text = "⚠️ Este Coordenador já foi cadastrado!";
                     lblMensagem.CssClass = "alert alert-warning d-block";
                     LimparCampos();
                     AtualizarGrid();
-                    return; // Para a execução aqui
+                    return; 
                 }
 
-                // 2. ADICIONAR NA LISTA ESTÁTICA
-                listaBolsistas.Add(novo);
+                listaCoordenadores.Add(novo);
 
-                // 3. Limpar os campos para o próximo cadastro
                 LimparCampos();
 
-                // 4. Mensagem de sucesso e atualizar visualização
-                lblMensagem.Text = "Bolsista cadastrado com sucesso!";
+                lblMensagem.Text = "Coordenador cadastrado com sucesso!";
                 lblMensagem.CssClass = "alert alert-success d-block";
 
-                // Chamar o método que atualiza o GridView (veremos abaixo)
                 AtualizarGrid();
             }
             catch (Exception)
@@ -93,19 +86,19 @@ namespace WebApplication1
         private void LimparCampos()
         {
             txtNome.Text = "";
-            txtMatricula.Text = "";
+            txtTitulo.Text = "";
             txtCPF.Text = "";
-            txtDataNasc.Text = "";
-            ddlSexo.SelectedIndex = 0;
-            txtNome.Focus(); // Coloca o cursor de volta no Nome
+            txtAreaAtuacao.Text = "";
+            txtEmail.Text = "";
+            txtNome.Focus(); 
         }
 
         private void AtualizarGrid()
         {
-            if (listaBolsistas.Count > 0)
+            if (listaCoordenadores.Count > 0)
             {
                 // 1. Dizemos ao Grid qual é a fonte de dados (nossa lista)
-                gridBolsistas.DataSource = listaBolsistas;
+                gridBolsistas.DataSource = listaCoordenadores;
 
                 // 2. O DataBind() "desenha" as linhas da tabela no HTML
                 gridBolsistas.DataBind();
@@ -135,30 +128,10 @@ namespace WebApplication1
 
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
-            listaBolsistas = listaBolsistas.OrderBy(x => x.Nome).ToList();
+            listaCoordenadores = listaCoordenadores.OrderBy(x => x.Nome).ToList();
             AtualizarGrid();
         }
-
-        protected void lbtnFiltrar_Click(object sender, EventArgs e)
-        {
-            var filtrados = listaBolsistas.Where(x => x.Sexo == "F").ToList();
-
-            gridBolsistas.DataSource = filtrados;
-            gridBolsistas.DataBind();
-
-            if (filtrados.Count == 0)
-            {
-                lblAvisoGrid.Text = "Nenhuma Bolsista encontrada!";
-                lblAvisoGrid.Visible = true;
-                lblMensagem.Visible = false;
-            }
-            else
-            {
-                lblAvisoGrid.Visible = false;
-                lblMensagem.Visible = false;
-            }
-        }
-
+            
         protected void lbtnLimparFiltros_Click(object sender, EventArgs e)
         {
             txtPesquisa.Text = "";
@@ -175,16 +148,16 @@ namespace WebApplication1
                 return;
             }
 
-            var encontrados = listaBolsistas
+            var encontrados = listaCoordenadores
                 .Where(x => x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
 
             gridBolsistas.DataSource = encontrados;
             gridBolsistas.DataBind();
 
-            if(encontrados.Count == 0)
+            if (encontrados.Count == 0)
             {
-                lblAvisoGrid.Text = "Nenhum Bolsista encontrado!";
+                lblAvisoGrid.Text = "Nenhum Coordenador encontrado!";
                 lblAvisoGrid.Visible = true;
                 lblMensagem.Visible = false;
             }
@@ -194,6 +167,5 @@ namespace WebApplication1
                 lblMensagem.Visible = false;
             }
         }
-
     }
 }

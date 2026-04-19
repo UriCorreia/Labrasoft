@@ -18,11 +18,15 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto"> <li class="nav-item">
+                    <ul class="navbar-nav ml-auto"> 
+                        <li class="nav-item">
                             <a class="nav-link" href="Index.aspx">Início</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="CadastroBolsista.aspx">Novo Cadastro</a>
+                            <a class="nav-link" href="CadastroBolsista.aspx">Cadastro Bolsista</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="CadastroCoordenador.aspx">Cadastro Coordenador</a>
                         </li>
                     </ul>
                 </div>
