@@ -43,34 +43,50 @@
                 </div>
 
 
-                <div class="d-grid gap-2">
-                    <asp:Button ID="btnSalvar" runat="server" Text="Salvar e Processar Cadastro" 
-                        CssClass="btn btn-success btn-lg w-100" OnClick="btnSalvar_Click" />
-                    <asp:Button ID="btnLimpar" runat="server" Text="Limpar Campos" 
-                        CssClass="mt-2 btn btn-outline-secondary btn-lg btn-block" OnClick="btnLimpar_Click" />
-                    <div>
-                        <asp:Panel ID="pnlFilftros" runat="server" visible="false">
-                            <asp:Button ID="btnOrdenar" runat="server" Text="Ordenar por nome"
-                                CssClass="mt-2 btn btn-info btn-lg w-100" OnClick="btnOrdenar_Click" />
-                            <asp:Button ID="btnFiltrar" runat="server" Text="Filtrar Mulheres"
-                                CssClass="mt-2 btn btn-warning btn-lg w-100" OnClick="btnFiltrar_Click" />
-                            <asp:Button ID="btnLimparFiltros" runat="server" Text="Limpar filtros"
-                                CssClass="mt-2 btn btn-outline-dark btn-lg w-100" OnClick="btnLimparFiltros_Click" />
-
-                            <div class="col-md-6 form-group mb-3 align-items-center">
-                                <asp:Label ID="lblPesquisa" runat="server" class="form-label font-weight-bold">Barra de Pesquisa</asp:Label>
-                                <div class="row input-group" >
-                                    <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Pesquise por Nome"></asp:TextBox>
-                                    <asp:LinkButton ID="lbtnPesquisa" runat="server" Text="Pesquisar" 
-                                        CssClass="btn btn-primary " OnClick="btnPesquisar_Click">
-                                        <i>🔍</i>
-                                    </asp:LinkButton>
-                                </div>
-                            </div>
-                        </asp:Panel>                       
+                <div class="row g-2 mb-4">
+                    <div class="col-md-8">
+                        <asp:Button ID="btnSalvar" runat="server" Text="Salvar e Processar Cadastro"
+                            CssClass="btn btn-success btn-lg w-100 shadow-sm" OnClick="btnSalvar_Click" />
                     </div>
-
+                    <div class="col-md-4">
+                        <asp:Button ID="btnLimpar" runat="server" Text="Limpar Campos"
+                            CssClass="btn btn-outline-secondary btn-lg w-100" OnClick="btnLimpar_Click" />
+                    </div>
                 </div>
+
+                <hr />
+
+                <asp:Panel ID="pnlFilftros" runat="server" Visible="false" CssClass="bg-light p-3 rounded border mb-3">
+                    <div class="row align-items-end g-3">
+
+                        <div class="col-md-4">
+                            <label class="form-label small font-weight-bold">Pesquisar na Lista:</label>
+                            <div class="input-group">
+                                <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Nome ou Matrícula"></asp:TextBox>
+                                <asp:LinkButton ID="lbtnPesquisa" runat="server" CssClass="btn btn-primary" OnClick="lbtnPesquisar_Click">
+                                    🔍
+                                </asp:LinkButton>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 text-md-end">
+                            <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                                <asp:LinkButton ID="lbtnOrdenar" runat="server" CssClass="btn btn-info text-white" OnClick="lbtnOrdenar_Click">
+                                    A-Z Nome
+                                </asp:LinkButton>
+
+                                <asp:LinkButton ID="lbtnFiltrar" runat="server" CssClass="btn btn-warning text-dark" OnClick="lbtnFiltrar_Click">
+                                    ♀️ Mulheres
+                                </asp:LinkButton>
+
+                                <asp:LinkButton ID="lbtnLimparFiltros" runat="server" CssClass="btn btn-outline-dark" OnClick="lbtnLimparFiltros_Click">
+                                    Limpar Filtros
+                                </asp:LinkButton>
+                            </div>
+                        </div>
+
+                    </div>
+                </asp:Panel>
                 <hr />
                 <div class="mt-5">
                     <h3 class="text-secondary">📋 Lista de Bolsistas Cadastrados</h3>

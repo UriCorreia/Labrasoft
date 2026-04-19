@@ -133,13 +133,13 @@ protected void Page_Load(object sender, EventArgs e)
             }
         }
 
-        protected void btnOrdenar_Click(object sender, EventArgs e)
+        protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
             listaBolsistas = listaBolsistas.OrderBy(x => x.Nome).ToList();
             AtualizarGrid();
         }
 
-        protected void btnFiltrar_Click(object sender, EventArgs e)
+        protected void lbtnFiltrar_Click(object sender, EventArgs e)
         {
             var filtrados = listaBolsistas.Where(x => x.Sexo == "F").ToList();
 
@@ -159,13 +159,13 @@ protected void Page_Load(object sender, EventArgs e)
             }
         }
 
-        protected void btnLimparFiltros_Click(object sender, EventArgs e)
+        protected void lbtnLimparFiltros_Click(object sender, EventArgs e)
         {
             txtPesquisa.Text = "";
 
             AtualizarGrid();
         }
-        protected void btnPesquisar_Click(object sender, EventArgs e)
+        protected void lbtnPesquisar_Click(object sender, EventArgs e)
         {
             string pesquisado = txtPesquisa.Text;
 
