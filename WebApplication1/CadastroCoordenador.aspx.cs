@@ -10,14 +10,7 @@ namespace WebApplication1
 {
     public partial class CadastroCoordenador : System.Web.UI.Page
     {
-        public static List<Coordenador> listaCoordenadores = new List<Coordenador>()
-        {
-            new Coordenador { Nome = "Ricardo Aris", Titulo = "Doutor", CPF = "111.222.333-44", AreaAtuacao = "Engenharia de Software", Email = "ricardo.aris@universidade.edu" },
-            new Coordenador { Nome = "Maria Oliveira", Titulo = "Doutora", CPF = "555.666.777-88", AreaAtuacao = "Inteligência Artificial", Email = "maria.ai@universidade.edu" },
-            new Coordenador { Nome = "Carlos Santos", Titulo = "Mestre", CPF = "999.888.777-66", AreaAtuacao = "Banco de Dados", Email = "carlos.santos@universidade.edu" },
-            new Coordenador { Nome = "Fernanda Lima", Titulo = "Doutora", CPF = "123.456.789-00", AreaAtuacao = "Sistemas Distribuídos", Email = "fernanda.lima@universidade.edu" },
-            new Coordenador { Nome = "Roberto Souza", Titulo = "Mestre", CPF = "444.333.222-11", AreaAtuacao = "Segurança da Informação", Email = "roberto.seg@universidade.edu" }
-        };
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             // Na primeira vez que a página carrega, podemos querer exibir a lista 
@@ -50,7 +43,7 @@ namespace WebApplication1
                 novo.Email = txtEmail.Text;
 
                 //1.5 Lógica provisória para não cadastrar o mesmo usuário duas vezes
-                if (listaCoordenadores.Any(b => b.CPF == txtCPF.Text))
+                if (Repositorio.listaCoordenadores.Any(b => b.CPF == txtCPF.Text))
                 {
                     lblMensagem.Text = "⚠️ Este Coordenador já foi cadastrado!";
                     lblMensagem.CssClass = "alert alert-warning d-block";
@@ -59,7 +52,7 @@ namespace WebApplication1
                     return; 
                 }
 
-                listaCoordenadores.Add(novo);
+                Repositorio.listaCoordenadores.Add(novo);
 
                 LimparCampos();
 
@@ -95,10 +88,10 @@ namespace WebApplication1
 
         private void AtualizarGrid()
         {
-            if (listaCoordenadores.Count > 0)
+            if (Repositorio.listaCoordenadores.Count > 0)
             {
                 // 1. Dizemos ao Grid qual é a fonte de dados (nossa lista)
-                gridBolsistas.DataSource = listaCoordenadores;
+                gridBolsistas.DataSource = Repositorio.listaCoordenadores;
 
                 // 2. O DataBind() "desenha" as linhas da tabela no HTML
                 gridBolsistas.DataBind();
@@ -128,7 +121,7 @@ namespace WebApplication1
 
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
-            listaCoordenadores = listaCoordenadores.OrderBy(x => x.Nome).ToList();
+            Repositorio.listaCoordenadores = Repositorio.listaCoordenadores.OrderBy(x => x.Nome).ToList();
             AtualizarGrid();
         }
             
@@ -148,7 +141,7 @@ namespace WebApplication1
                 return;
             }
 
-            var encontrados = listaCoordenadores
+            var encontrados = Repositorio.listaCoordenadores
                 .Where(x => x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
 
