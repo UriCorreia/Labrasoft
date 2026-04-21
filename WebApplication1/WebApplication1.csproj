@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CadastroCoordenador.aspx" />
+    <Content Include="CadastroProjeto.aspx" />
     <Content Include="Index.aspx" />
     <Content Include="CadastroBolsista.aspx" />
     <Content Include="Web.config" />
@@ -80,6 +81,13 @@
     </Compile>
     <Compile Include="CadastroCoordenador.aspx.designer.cs">
       <DependentUpon>CadastroCoordenador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CadastroProjeto.aspx.cs">
+      <DependentUpon>CadastroProjeto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CadastroProjeto.aspx.designer.cs">
+      <DependentUpon>CadastroProjeto.aspx</DependentUpon>
     </Compile>
     <Compile Include="Index.aspx.cs">
       <DependentUpon>Index.aspx</DependentUpon>

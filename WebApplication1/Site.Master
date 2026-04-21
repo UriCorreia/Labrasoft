@@ -28,6 +28,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="CadastroCoordenador.aspx">Cadastro Coordenador</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="CadastroProjeto.aspx">Cadastro Projeto</a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -7,7 +7,8 @@ namespace WebApplication1.Models
 {
     public class Projeto
     {
-        public string Nome { get; set;  }
+        public string Titulo { get; set;  }
+        public string AreaConhecimento { get; set; }
         public float VerbaAprovada { get; set; }
         public float BolsaIndividual { get; set; }
         public Coordenador CoordenadorResponsavel { get; set; }
