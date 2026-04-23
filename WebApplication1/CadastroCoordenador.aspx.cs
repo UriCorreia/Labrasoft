@@ -142,7 +142,8 @@ namespace WebApplication1
             }
 
             var encontrados = Repositorio.listaCoordenadores
-                .Where(x => x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0)
+                .Where(x => (x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                            (x.Titulo != null && x.Titulo.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0))
                 .ToList();
 
             gridBolsistas.DataSource = encontrados;

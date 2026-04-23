@@ -28,6 +28,32 @@ namespace WebApplication1.Models
             new Coordenador { Nome = "Fernanda Lima", Titulo = "Doutora", CPF = "123.456.789-00", AreaAtuacao = "Sistemas Distribuídos", Email = "fernanda.lima@universidade.edu" },
             new Coordenador { Nome = "Roberto Souza", Titulo = "Mestre", CPF = "444.333.222-11", AreaAtuacao = "Segurança da Informação", Email = "roberto.seg@universidade.edu" }
         };
-        public static List<Projeto> listaProjetos = new List<Projeto>();
+        public static List<Projeto> listaProjetos = new List<Projeto>()
+        {
+            new Projeto {
+                Titulo = "LabIA - Inovação em Redes Neurais",
+                AreaConhecimento = "Inteligência Artificial",
+                VerbaAprovada = 50000.00f,
+                BolsaIndividual = 700.00f,
+                CoordenadorResponsavel = listaCoordenadores[1], // Maria Oliveira
+                BolsistasVinculados = new List<Bolsista> { listaBolsistas[0], listaBolsistas[1] }
+            },
+            new Projeto {
+                Titulo = "Labrasoft - Engenharia Ágil",
+                AreaConhecimento = "Engenharia de Software",
+                VerbaAprovada = 35000.00f,
+                BolsaIndividual = 600.00f,
+                CoordenadorResponsavel = listaCoordenadores[0], // Ricardo Aris
+                BolsistasVinculados = new List<Bolsista> { listaBolsistas[2], listaBolsistas[3] }
+            },
+            new Projeto {
+                Titulo = "SecureNet - Defesa de Perímetro",
+                AreaConhecimento = "Segurança da Informação",
+                VerbaAprovada = 20000.00f,
+                BolsaIndividual = 500.00f,
+                CoordenadorResponsavel = listaCoordenadores[4], // Roberto Souza
+                BolsistasVinculados = new List<Bolsista> { listaBolsistas[4] }
+            }
+        };
     }
 }

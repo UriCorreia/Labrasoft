@@ -64,7 +64,7 @@
                         <div class="col-md-4">
                             <label class="form-label small font-weight-bold">Pesquisar na Lista:</label>
                             <div class="input-group">
-                                <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Titulo do Projeto"></asp:TextBox>
+                                <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Titulo do Projeto ou Coordenador"></asp:TextBox>
                                 <asp:LinkButton ID="lbtnPesquisa" runat="server" CssClass="btn btn-primary" OnClick="lbtnPesquisa_Click">
                                 🔍
                                 </asp:LinkButton>
@@ -74,11 +74,11 @@
                         <div class="col-md-8 text-md-end">
                             <div class="d-flex flex-wrap gap-2 justify-content-md-end">
                                 <asp:LinkButton ID="lbtnOrdenar" runat="server" CssClass="btn btn-info text-white" OnClick="lbtnOrdenar_Click">
-                                A-Z Nome
+                                    A-Z Nome
                                 </asp:LinkButton>
 
-                                <asp:LinkButton ID="lbtnLimparFiltros" runat="server" CssClass="btn btn-outline-dark" >
-                                Limpar Filtros
+                                <asp:LinkButton ID="lbtnLimparFiltros" runat="server" CssClass="btn btn-outline-dark" OnClick="lbtnLimparFiltro_Click">
+                                    Limpar Filtros
                                 </asp:LinkButton>
                             </div>
                         </div>

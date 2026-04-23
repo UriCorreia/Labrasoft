@@ -81,6 +81,7 @@ namespace WebApplication1
             txtAreaConhecimento.Text = "";
             txtVerbaAprovada.Text = "";
             txtBolsaIndividual.Text = "";
+            txtPesquisa.Text = "";
             ddlCoordenadores.SelectedIndex = 0;
             foreach (ListItem item in cblBolsistas.Items)
             {
@@ -120,8 +121,12 @@ namespace WebApplication1
         }
         protected void lbtnLimparFiltro_Click(object sender, EventArgs e)
         {
-            txtPesquisa.Text = "";
+            LimparCampos();
+
             AtualizarGrid();
+
+            lblMensagem.Text = "";
+            lblMensagem.CssClass = "";
         }
         protected void lbtnPesquisa_Click(object sender, EventArgs e)
         {
@@ -134,7 +139,8 @@ namespace WebApplication1
             }
 
             var encontrados = Repositorio.listaProjetos
-                .Where(p => p.Titulo.ToLower().Contains(pesquisado.ToLower()))
+                .Where(p => (p.Titulo.ToLower().Contains(pesquisado.ToLower())) ||
+                            (p.CoordenadorResponsavel.Nome.ToLower().Contains(pesquisado.ToLower())))
                 .ToList();
 
             gridProjetos.DataSource = encontrados;
