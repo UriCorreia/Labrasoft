@@ -14,20 +14,34 @@ namespace WebApplication1
         {
             if (!IsPostBack)
             {
-                ddlCoordenadores.DataSource = Repositorio.listaCoordenadores;
-                ddlCoordenadores.DataTextField = "Nome";
-                ddlCoordenadores.DataValueField = "CPF";
-                ddlCoordenadores.DataBind();
-                ddlCoordenadores.Items.Insert(0, new ListItem("Selecione um Coordenador", "0"));
-
-                cblBolsistas.DataSource = Repositorio.listaBolsistas;
-                cblBolsistas.DataTextField = "Nome";
-                cblBolsistas.DataValueField = "Matricula";
-                cblBolsistas.DataBind();
-
-                AtualizarGrid();
+                carregarComponents();
             }
         }
+        private void carregarComponents()
+        {
+            var coordenadoresOcupados = Repositorio.listaProjetos
+                                                        .Select(x => x.CoordenadorResponsavel.CPF).ToList();
+
+            ddlCoordenadores.DataSource = Repositorio.listaCoordenadores.Where(x => !coordenadoresOcupados.Contains(x.CPF))
+                                                                        .ToList();
+            ddlCoordenadores.DataTextField = "Nome";
+            ddlCoordenadores.DataValueField = "CPF";
+            ddlCoordenadores.DataBind();
+            ddlCoordenadores.Items.Insert(0, new ListItem("Selecione um Coordenador", "0"));
+
+            var bolsistasOcupados = Repositorio.listaProjetos.SelectMany(x => x.BolsistasVinculados)
+                                                             .Select(x => x.Matricula)
+                                                             .ToList();
+
+            cblBolsistas.DataSource = Repositorio.listaBolsistas.Where(x => !bolsistasOcupados.Contains(x.Matricula))
+                                                                .ToList();
+            cblBolsistas.DataTextField = "Nome";
+            cblBolsistas.DataValueField = "Matricula";
+            cblBolsistas.DataBind();
+
+            AtualizarGrid();
+        }
+
         public void btnSalvar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTitulo.Text) ||
@@ -42,6 +56,22 @@ namespace WebApplication1
             }
             try
             {
+                string cpfValidar = ddlCoordenadores.SelectedValue;
+                List<string> mValidar = new List<string>();
+                foreach(ListItem item in cblBolsistas.Items)
+                {
+                    if (item.Selected) mValidar.Add(item.Value);
+                }
+
+                bool disponivel = Repositorio.validarDisponibilidade(cpfValidar, mValidar);
+
+                if (!disponivel)
+                {
+                    lblMensagem.Text = "⚠️ O Coordenador ou algum dos Bolsistas selecionados já estão alocados em algum Projeto!";
+                    lblMensagem.CssClass = "alert alert-warning d-block";
+                    return;
+                }
+
                 Projeto novo = new Projeto();
                 novo.Titulo = txtTitulo.Text;
                 novo.AreaConhecimento = txtAreaConhecimento.Text;
@@ -59,9 +89,12 @@ namespace WebApplication1
                         }
                     }
                 }
+
                 Repositorio.listaProjetos.Add(novo);
 
                 LimparCampos();
+
+                carregarComponents();
                 
                 lblMensagem.Text = "Projeto cadastrado com sucesso!";
                 lblMensagem.CssClass = "alert alert-success d-block";

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using WebApplication1.Models;
@@ -55,5 +56,15 @@ namespace WebApplication1.Models
                 BolsistasVinculados = new List<Bolsista> { listaBolsistas[4] }
             }
         };
+
+        public static bool validarDisponibilidade(String CPFCoordenador, List<string> MatriculasBolsistas)
+        {
+            if (Repositorio.listaProjetos.Any(x => x.CoordenadorResponsavel.CPF == CPFCoordenador)) return false;
+            foreach(var matricula in MatriculasBolsistas)
+            {
+                if (Repositorio.listaProjetos.Any(x => x.BolsistasVinculados.Any(y => y.Matricula == matricula))) return false;
+            }
+            return true;
+        }
     }
 }
