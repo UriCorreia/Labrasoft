@@ -99,6 +99,8 @@ namespace WebApplication1
                 lblMensagem.Text = "Projeto cadastrado com sucesso!";
                 lblMensagem.CssClass = "alert alert-success d-block";
 
+                ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
+
                 AtualizarGrid();
             }
             catch (Exception)

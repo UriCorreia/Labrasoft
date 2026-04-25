@@ -59,6 +59,8 @@ namespace WebApplication1
                 lblMensagem.Text = "Coordenador cadastrado com sucesso!";
                 lblMensagem.CssClass = "alert alert-success d-block";
 
+                ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
+
                 AtualizarGrid();
             }
             catch (Exception)

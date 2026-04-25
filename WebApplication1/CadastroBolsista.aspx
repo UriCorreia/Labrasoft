@@ -10,6 +10,10 @@
                 <p class="text-muted text-center small">Preencha os campos abaixo para processar o cadastro.</p>
                 <hr />
 
+                <div id="containerMensagem" class="mt-4 text-center">
+                    <asp:Label ID="lblMensagem" runat="server" CssClass="h6"></asp:Label>
+                </div>
+
                 <div class="form-group mb-3">
                     <label class="form-label font-weight-bold">Nome Completo:</label>
                     <asp:TextBox ID="txtNome" runat="server" CssClass="form-control" placeholder="Ex: João Silva"></asp:TextBox>
@@ -102,11 +106,29 @@
                     <asp:Label ID="lblAvisoGrid" runat="server" Text="Nenhum bolsista na memória." 
                         CssClass="text-muted italic" Visible="false"></asp:Label>
                 </div>
-
-                <div class="mt-4 text-center">
-                    <asp:Label ID="lblMensagem" runat="server" CssClass="h6"></asp:Label>
-                </div>
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function esconderMensagem() {
+            $("#containerMensagem").stop(true, true).delay(3000).fadeOut(1000, function () {
+
+                $('#<%= lblMensagem.ClientID %>').text("");
+
+            $('#<%= lblMensagem.ClientID %>').removeClass("alert alert-success alert-danger alert-warning d-block");
+
+            $(this).hide().css("opacity", "1");
+        });
+        }
+
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        if (prm != null) {
+            prm.add_endRequest(function (sender, e) {
+                if (document.getElementById('<%= lblMensagem.ClientID %>').innerText != "") {
+                esconderMensagem();
+            }
+        });
+        }
+</script>
 </asp:Content>
