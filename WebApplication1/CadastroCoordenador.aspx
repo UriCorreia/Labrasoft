@@ -90,11 +90,11 @@
                 <div class="mt-5">
                     <h3 class="text-secondary">📋 Lista de Coordenadores Cadastrados</h3>
 
-                    <asp:GridView ID="gridBolsistas" runat="server"
+                    <asp:GridView ID="gridCoordenadores" runat="server"
                         CssClass="table table-hover table-striped border"
                         AutoGenerateColumns="true"
                         GridLines="None"
-                        OnRowDataBound="gridBolsistas_RowDataBound">
+                        OnRowDataBound="gridCoordenadores_RowDataBound">
                         <HeaderStyle CssClass="thead-dark" />
                     </asp:GridView>
 

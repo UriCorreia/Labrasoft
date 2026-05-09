@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using WebApplication1.Models; 
+using WebApplication1.Models;
+using WebApplication1.Persistence;
 
 namespace WebApplication1
 {
@@ -34,7 +36,6 @@ namespace WebApplication1
             }
             try
             {
-                // 1. Instanciar e preencher o objeto (conforme você já fez)
                 Coordenador novo = new Coordenador();
                 novo.Nome = txtNome.Text;
                 novo.Titulo = txtTitulo.Text;
@@ -42,30 +43,26 @@ namespace WebApplication1
                 novo.AreaAtuacao = txtAreaAtuacao.Text;
                 novo.Email = txtEmail.Text;
 
-                //1.5 Lógica provisória para não cadastrar o mesmo usuário duas vezes
-                if (Repositorio.listaCoordenadores.Any(b => b.CPF == txtCPF.Text))
+                CoordenadorDAO dao = new CoordenadorDAO();
+
+                if (dao.Salvar(novo))
                 {
-                    lblMensagem.Text = "⚠️ Este Coordenador já foi cadastrado!";
-                    lblMensagem.CssClass = "alert alert-warning d-block";
+                    lblMensagem.Text = "Coordenador cadastrado com Sucesso!";
+
                     LimparCampos();
                     AtualizarGrid();
-                    return; 
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
                 }
-
-                Repositorio.listaCoordenadores.Add(novo);
-
-                LimparCampos();
-
-                lblMensagem.Text = "Coordenador cadastrado com sucesso!";
-                lblMensagem.CssClass = "alert alert-success d-block";
-
-                ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
-
-                AtualizarGrid();
+                else
+                {
+                    lblMensagem.Text = "Erro ao cadastrar. Verifique os dados.";
+                    lblMensagem.CssClass = "alert alert-danger d-block";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblMensagem.Text = "Erro ao cadastrar. Verifique os dados.";
+                lblMensagem.Text = "⚠️ Ocorreu um erro inesperado: " + ex.Message;
                 lblMensagem.CssClass = "alert alert-danger d-block";
             }
         }
@@ -73,7 +70,6 @@ namespace WebApplication1
         {
             LimparCampos();
 
-            // Aproveite para limpar a mensagem de erro/sucesso também
             lblMensagem.Text = "";
             lblMensagem.CssClass = "";
         }
@@ -90,27 +86,17 @@ namespace WebApplication1
 
         private void AtualizarGrid()
         {
-            if (Repositorio.listaCoordenadores.Count > 0)
-            {
-                // 1. Dizemos ao Grid qual é a fonte de dados (nossa lista)
-                gridBolsistas.DataSource = Repositorio.listaCoordenadores;
+            CoordenadorDAO dao = new CoordenadorDAO();
+            DataTable dt = dao.Listar();
 
-                // 2. O DataBind() "desenha" as linhas da tabela no HTML
-                gridBolsistas.DataBind();
-
-                lblAvisoGrid.Visible = false;
-                pnlFilftros.Visible = true;
-                gridBolsistas.Visible = true;
-            }
-            else
+            if(dt != null)
             {
-                lblAvisoGrid.Visible = true;
-                pnlFilftros.Visible = false;
-                gridBolsistas.Visible = false;
+                gridCoordenadores.DataSource = dt;
+                gridCoordenadores.DataBind();
             }
         }
 
-        protected void gridBolsistas_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void gridCoordenadores_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
@@ -148,8 +134,8 @@ namespace WebApplication1
                             (x.Titulo != null && x.Titulo.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0))
                 .ToList();
 
-            gridBolsistas.DataSource = encontrados;
-            gridBolsistas.DataBind();
+            gridCoordenadores.DataSource = encontrados;
+            gridCoordenadores.DataBind();
 
             if (encontrados.Count == 0)
             {

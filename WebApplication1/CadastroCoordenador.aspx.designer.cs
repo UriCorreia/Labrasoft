@@ -132,13 +132,13 @@ namespace WebApplication1
         protected global::System.Web.UI.WebControls.LinkButton lbtnLimparFiltros;
 
         /// <summary>
-        /// Controle gridBolsistas.
+        /// Controle gridCoordenadores.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gridBolsistas;
+        protected global::System.Web.UI.WebControls.GridView gridCoordenadores;
 
         /// <summary>
         /// Controle lblAvisoGrid.
