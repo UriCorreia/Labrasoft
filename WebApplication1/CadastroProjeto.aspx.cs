@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebApplication1.Models;
+using WebApplication1.Database;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace WebApplication1
 {
@@ -19,27 +22,40 @@ namespace WebApplication1
         }
         private void carregarComponents()
         {
-            var coordenadoresOcupados = Repositorio.listaProjetos
-                                                        .Select(x => x.CoordenadorResponsavel.CPF).ToList();
+            using(SqlConnection conn = Conexao.ObterConexao())
+            {
+                if(conn != null)
+                {
+                    string sqlCoordenador = @"select id, nome from Coordenador
+                                              where id not in (select idCoordenador from Projeto)";
 
-            ddlCoordenadores.DataSource = Repositorio.listaCoordenadores.Where(x => !coordenadoresOcupados.Contains(x.CPF))
-                                                                        .ToList();
-            ddlCoordenadores.DataTextField = "Nome";
-            ddlCoordenadores.DataValueField = "CPF";
-            ddlCoordenadores.DataBind();
-            ddlCoordenadores.Items.Insert(0, new ListItem("Selecione um Coordenador", "0"));
+                    SqlCommand cmdCoordenador = new SqlCommand(sqlCoordenador, conn);
 
-            var bolsistasOcupados = Repositorio.listaProjetos.SelectMany(x => x.BolsistasVinculados)
-                                                             .Select(x => x.Matricula)
-                                                             .ToList();
+                    DataTable dtCoord = new DataTable();
+                    dtCoord.Load(cmdCoordenador.ExecuteReader()); // Lê os dados e já libera o reader para outra consulta
 
-            cblBolsistas.DataSource = Repositorio.listaBolsistas.Where(x => !bolsistasOcupados.Contains(x.Matricula))
-                                                                .ToList();
-            cblBolsistas.DataTextField = "Nome";
-            cblBolsistas.DataValueField = "Matricula";
-            cblBolsistas.DataBind();
+                    ddlCoordenadores.DataSource = dtCoord;
+                    ddlCoordenadores.DataTextField = "nome";
+                    ddlCoordenadores.DataValueField = "id";
+                    ddlCoordenadores.DataBind();
+                    ddlCoordenadores.Items.Insert(0, new ListItem("Selecione um Coordenador", "0"));
 
-            AtualizarGrid();
+                    cmdCoordenador.Dispose();
+
+                    string sqlBolsistas = @"select id, nome from Bolsista
+                                            where id not in (select idBolsista from ProjetoBolsista)";
+
+                    SqlCommand cmdBolsistas = new SqlCommand(sqlBolsistas, conn);
+
+                    DataTable dtBols = new DataTable();
+                    dtBols.Load(cmdBolsistas.ExecuteReader());
+
+                    cblBolsistas.DataSource = dtBols;
+                    cblBolsistas.DataTextField = "nome";
+                    cblBolsistas.DataValueField = "id";
+                    cblBolsistas.DataBind();
+                }
+            }
         }
 
         public void btnSalvar_Click(object sender, EventArgs e)

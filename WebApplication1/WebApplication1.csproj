@@ -89,6 +89,7 @@
     <Compile Include="CadastroProjeto.aspx.designer.cs">
       <DependentUpon>CadastroProjeto.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Database\Conexao.cs" />
     <Compile Include="Index.aspx.cs">
       <DependentUpon>Index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
