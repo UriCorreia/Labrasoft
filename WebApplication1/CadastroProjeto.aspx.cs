@@ -8,6 +8,7 @@ using WebApplication1.Models;
 using WebApplication1.Database;
 using System.Data.SqlClient;
 using System.Data;
+using WebApplication1.Persistence;
 
 namespace WebApplication1
 {
@@ -72,56 +73,47 @@ namespace WebApplication1
             }
             try
             {
-                string cpfValidar = ddlCoordenadores.SelectedValue;
-                List<string> mValidar = new List<string>();
-                foreach(ListItem item in cblBolsistas.Items)
-                {
-                    if (item.Selected) mValidar.Add(item.Value);
-                }
-
-                bool disponivel = Repositorio.validarDisponibilidade(cpfValidar, mValidar);
-
-                if (!disponivel)
-                {
-                    lblMensagem.Text = "⚠️ O Coordenador ou algum dos Bolsistas selecionados já estão alocados em algum Projeto!";
-                    lblMensagem.CssClass = "alert alert-warning d-block";
-                    return;
-                }
 
                 Projeto novo = new Projeto();
                 novo.Titulo = txtTitulo.Text;
                 novo.AreaConhecimento = txtAreaConhecimento.Text;
                 novo.VerbaAprovada = float.Parse(txtVerbaAprovada.Text);
                 novo.BolsaIndividual = float.Parse(txtBolsaIndividual.Text);
-                novo.CoordenadorResponsavel = Repositorio.listaCoordenadores.FirstOrDefault(c => c.CPF == ddlCoordenadores.SelectedValue);
-                foreach (ListItem item in cblBolsistas.Items)
+                novo.CoordenadorResponsavel = new Coordenador
                 {
-                    if (item.Selected)
+                    Id = int.Parse(ddlCoordenadores.SelectedValue)
+                };
+
+                List<int> idsBolsistas = new List<int>();
+                foreach(ListItem item in cblBolsistas.Items)
+                {
+                    if(item.Selected)
                     {
-                        Bolsista bolsistaSelecionado = Repositorio.listaBolsistas.FirstOrDefault(b => b.Matricula == item.Value);
-                        if (bolsistaSelecionado != null)
-                        {
-                            novo.BolsistasVinculados.Add(bolsistaSelecionado);
-                        }
+                        idsBolsistas.Add(int.Parse(item.Value));
                     }
                 }
 
-                Repositorio.listaProjetos.Add(novo);
+                ProjetoDAO dao = new ProjetoDAO();
+                if(dao.Salvar(novo, idsBolsistas))
+                {
+                    lblMensagem.Text = "Projeto cadastrado com sucesso!";
+                    lblMensagem.CssClass = "alert alert-success d-block";
 
-                LimparCampos();
+                    LimparCampos();
+                    carregarComponents(); 
+                    AtualizarGrid();     
 
-                carregarComponents();
-                
-                lblMensagem.Text = "Projeto cadastrado com sucesso!";
-                lblMensagem.CssClass = "alert alert-success d-block";
-
-                ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
-
-                AtualizarGrid();
+                    ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
+                }
+                else
+                {
+                    lblMensagem.Text = "Erro ao salvar o projeto verifique os dados.";
+                    lblMensagem.CssClass = "alert alert-danger d-block";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblMensagem.Text = "Erro ao cadastrar. Verifique os dados!";
+                lblMensagem.Text = "⚠️ Ocorreu um erro inesperado: " + ex.Message;
                 lblMensagem.CssClass = "alert alert-danger d-block";
             }
         }
@@ -149,20 +141,14 @@ namespace WebApplication1
         }
         private void AtualizarGrid()
         {
-            if(Repositorio.listaProjetos.Count > 0)
-            {
-                gridProjetos.DataSource = Repositorio.listaProjetos;
-                gridProjetos.DataBind();
 
-                lblAvisoGrid.Visible = false;
-                pnlFilftros.Visible = true;
-                gridProjetos.Visible = true;
-            }
-            else
+            ProjetoDAO dao = new ProjetoDAO();
+            DataTable dt = new DataTable();
+
+            if (dt != null)
             {
-                lblAvisoGrid.Visible = true;
-                pnlFilftros.Visible = false; 
-                gridProjetos.Visible = false;
+                gridProjetos.DataSource = dt;
+                gridProjetos.DataBind();
             }
         }
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
