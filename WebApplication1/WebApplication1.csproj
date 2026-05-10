@@ -108,6 +108,7 @@
     <Compile Include="Models\Coordenador.cs" />
     <Compile Include="Models\Projeto.cs" />
     <Compile Include="Models\Repositorio.cs" />
+    <Compile Include="Persistence\BolsistaDAO.cs" />
     <Compile Include="Persistence\CoordenadorDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

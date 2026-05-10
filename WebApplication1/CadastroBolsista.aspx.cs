@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
-using WebApplication1.Models; // Garante que o C# ache sua classe
+using WebApplication1.Models;
+using WebApplication1.Persistence; // Garante que o C# ache sua classe
 
 namespace WebApplication1
 {
@@ -40,29 +42,29 @@ namespace WebApplication1
                 novo.Sexo = ddlSexo.SelectedValue;
                 novo.DataNascimento = DateTime.Parse(txtDataNasc.Text);
 
-                if (Repositorio.listaBolsistas.Any(b => b.CPF == txtCPF.Text))
+                BolsistaDAO dao = new BolsistaDAO();
+
+                if (dao.Salvar(novo))
                 {
-                    lblMensagem.Text = "⚠️ Este bolsista já foi cadastrado!";
-                    lblMensagem.CssClass = "alert alert-warning d-block";
+
+                    lblMensagem.Text = "Bolsista cadastrado com sucesso!";
+                    lblMensagem.CssClass = "alert alert-success d-block";
+
                     LimparCampos();
                     AtualizarGrid();
-                    return; 
+
+                    ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
+
                 }
-
-                Repositorio.listaBolsistas.Add(novo);
-
-                LimparCampos();
-
-                lblMensagem.Text = "Bolsista cadastrado com sucesso!";
-                lblMensagem.CssClass = "alert alert-success d-block";
-
-                ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
-
-                AtualizarGrid();
+                else
+                {
+                    lblMensagem.Text = "Erro ao cadastrar. Por favor, verifique os dados!";
+                    lblMensagem.CssClass = "alert alert-danger d-block";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblMensagem.Text = "Erro ao cadastrar. Verifique os dados.";
+                lblMensagem.Text = "⚠️ Ocorreu um erro inesperado: " + ex.Message;
                 lblMensagem.CssClass = "alert alert-danger d-block";
             }
         }
@@ -70,7 +72,6 @@ namespace WebApplication1
         {
             LimparCampos();
 
-            // Aproveite para limpar a mensagem de erro/sucesso também
             lblMensagem.Text = "";
             lblMensagem.CssClass = "";
         }
@@ -82,28 +83,18 @@ namespace WebApplication1
             txtCPF.Text = "";
             txtDataNasc.Text = "";
             ddlSexo.SelectedIndex = 0;
-            txtNome.Focus(); // Coloca o cursor de volta no Nome
+            txtNome.Focus(); 
         }
 
         private void AtualizarGrid()
         {
-            if (Repositorio.listaBolsistas.Count > 0)
-            {
-                // 1. Dizemos ao Grid qual é a fonte de dados (nossa lista)
-                gridBolsistas.DataSource = Repositorio.listaBolsistas;
+            BolsistaDAO dao = new BolsistaDAO();
+            DataTable dt = dao.Listar();
 
-                // 2. O DataBind() "desenha" as linhas da tabela no HTML
+            if(dt != null)
+            {
+                gridBolsistas.DataSource = dt;
                 gridBolsistas.DataBind();
-
-                lblAvisoGrid.Visible = false;
-                pnlFilftros.Visible = true;
-                gridBolsistas.Visible = true;
-            }
-            else
-            {
-                lblAvisoGrid.Visible = true;
-                pnlFilftros.Visible = false;
-                gridBolsistas.Visible = false;
             }
         }
 
