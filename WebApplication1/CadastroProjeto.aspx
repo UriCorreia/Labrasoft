@@ -97,23 +97,16 @@
                         AutoGenerateColumns="false" GridLines="None">
                         <HeaderStyle CssClass="thead-dark" />
                         <Columns>
-                            <asp:BoundField DataField="Titulo" HeaderText="Projeto" />
-                            <asp:BoundField DataField="AreaConhecimento" HeaderText="Área" />
+                            <asp:BoundField DataField="titulo" HeaderText="Projeto" />
+                            <asp:BoundField DataField="areaConhecimento" HeaderText="Área de Conhecimento" />
 
-                            <asp:TemplateField HeaderText="Coordenador">
+                            <asp:TemplateField HeaderText="Coordenador Responsável">
                                 <ItemTemplate>
-                                    <%# Eval("CoordenadorResponsavel.Nome") %>
+                                    <%# Eval("nomeCoordenador") %>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="Bolsistas">
-                                <ItemTemplate>
-                                    <%# string.Join(", ", ((List<WebApplication1.Models.Bolsista>)Eval("BolsistasVinculados")).Select(b => b.Nome)) %>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-
-                            <asp:BoundField DataField="VerbaAprovada" HeaderText="Verba" DataFormatString="{0:C}" />
-                            <asp:BoundField DataField="BolsaIndividual" HeaderText="Bolsa" DataFormatString="{0:C}" />
+                            <asp:BoundField DataField="verbaAprovada" HeaderText="Verba Aprovada" DataFormatString="{0:C}" />
                         </Columns>
                     </asp:GridView>
 

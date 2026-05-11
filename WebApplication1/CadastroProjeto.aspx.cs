@@ -19,6 +19,7 @@ namespace WebApplication1
             if (!IsPostBack)
             {
                 carregarComponents();
+                AtualizarGrid();
             }
         }
         private void carregarComponents()
@@ -77,8 +78,8 @@ namespace WebApplication1
                 Projeto novo = new Projeto();
                 novo.Titulo = txtTitulo.Text;
                 novo.AreaConhecimento = txtAreaConhecimento.Text;
-                novo.VerbaAprovada = float.Parse(txtVerbaAprovada.Text);
-                novo.BolsaIndividual = float.Parse(txtBolsaIndividual.Text);
+                novo.VerbaAprovada = decimal.Parse(txtVerbaAprovada.Text);
+                novo.BolsaIndividual = decimal.Parse(txtBolsaIndividual.Text);
                 novo.CoordenadorResponsavel = new Coordenador
                 {
                     Id = int.Parse(ddlCoordenadores.SelectedValue)
@@ -121,11 +122,15 @@ namespace WebApplication1
         {
             txtTitulo.Text = "";
             txtAreaConhecimento.Text = "";
-            txtAreaConhecimento.Text = "";
             txtVerbaAprovada.Text = "";
             txtBolsaIndividual.Text = "";
             txtPesquisa.Text = "";
-            ddlCoordenadores.SelectedIndex = 0;
+
+            ddlCoordenadores.ClearSelection();
+
+            if (ddlCoordenadores.Items.Count > 0)
+                ddlCoordenadores.SelectedIndex = 0;
+
             foreach (ListItem item in cblBolsistas.Items)
             {
                 item.Selected = false;
@@ -143,12 +148,17 @@ namespace WebApplication1
         {
 
             ProjetoDAO dao = new ProjetoDAO();
-            DataTable dt = new DataTable();
+            DataTable dt = dao.Listar();
 
             if (dt != null)
             {
                 gridProjetos.DataSource = dt;
                 gridProjetos.DataBind();
+
+                if (dt.Rows.Count == 0) lblAvisoGrid.Text = "Nenhum projeto cadastrado.";
+
+                gridProjetos.Visible = true;
+                lblAvisoGrid.Visible = (dt.Rows.Count == 0);
             }
         }
         protected void lbtnOrdenar_Click(object sender, EventArgs e)

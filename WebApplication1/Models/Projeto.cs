@@ -10,8 +10,8 @@ namespace WebApplication1.Models
         public int Id { get; set; }
         public string Titulo { get; set;  }
         public string AreaConhecimento { get; set; }
-        public float VerbaAprovada { get; set; }
-        public float BolsaIndividual { get; set; }
+        public decimal VerbaAprovada { get; set; }
+        public decimal BolsaIndividual { get; set; }
         public Coordenador CoordenadorResponsavel { get; set; }
         public List<Bolsista> BolsistasVinculados { get; set; }
 

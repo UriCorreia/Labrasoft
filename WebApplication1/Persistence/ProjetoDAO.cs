@@ -21,14 +21,15 @@ namespace WebApplication1.Persistence
 
                 try
                 {
-                    string sql = @"insert into Projeto(titulo, areaConhecimento, verbaAprovada, verbaIndividual, idCoordenador)
-                                   values(@titulo, @areaConhecimento, @verbaAprovada, @verbaIndividual, @idCoordenador)";
+                    string sql = @"insert into Projeto(titulo, areaConhecimento, verbaAprovada, bolsaIndividual, idCoordenador)
+                                   values(@titulo, @areaConhecimento, @verbaAprovada, @bolsaIndividual, @idCoordenador)
+                                   select scope_identity();";
 
                     SqlCommand cmd = new SqlCommand(sql, conn, trans);
                     cmd.Parameters.AddWithValue("@titulo", projeto.Titulo);
                     cmd.Parameters.AddWithValue("@areaConhecimento", projeto.AreaConhecimento);
                     cmd.Parameters.AddWithValue("@verbaAprovada", projeto.VerbaAprovada);
-                    cmd.Parameters.AddWithValue("@verbaIndividual", projeto.BolsaIndividual);
+                    cmd.Parameters.AddWithValue("@bolsaIndividual", projeto.BolsaIndividual);
                     cmd.Parameters.AddWithValue("@idCoordenador", projeto.CoordenadorResponsavel.Id);
 
                     int idNovo = Convert.ToInt32(cmd.ExecuteScalar());
@@ -38,9 +39,9 @@ namespace WebApplication1.Persistence
                         string sqlVinculo = @"insert into ProjetoBolsista(idProjeto, idBolsista)
                                               values(@idProjeto, @idBolsista)";
                         SqlCommand cmdVinculo = new SqlCommand(sqlVinculo, conn, trans);
-                        cmd.Parameters.AddWithValue("@idProjeto", idNovo);
-                        cmd.Parameters.AddWithValue("@idBolsista", idBolsista);
-                        cmd.ExecuteNonQuery();
+                        cmdVinculo.Parameters.AddWithValue("@idProjeto", idNovo);
+                        cmdVinculo.Parameters.AddWithValue("@idBolsista", idBolsista);
+                        cmdVinculo.ExecuteNonQuery();
                     }
                     trans.Commit();
                     return true;
