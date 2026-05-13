@@ -92,51 +92,116 @@
                 <div class="mt-5">
                     <h3 class="text-secondary">📋 Lista de Projetos Cadastrados</h3>
 
-                    <asp:GridView ID="gridProjetos" runat="server"
-                        CssClass="table table-hover table-striped border shadow-sm"
-                        AutoGenerateColumns="false" GridLines="None">
+                    <asp:GridView ID="gridProjetos" runat="server" CssClass="table table-hover table-striped border shadow-sm"
+                        AutoGenerateColumns="false" GridLines="None" DataKeyNames="id"
+                        OnRowCommand="gridProjetos_RowCommand">
                         <HeaderStyle CssClass="thead-dark" />
+
                         <Columns>
                             <asp:BoundField DataField="titulo" HeaderText="Projeto" />
                             <asp:BoundField DataField="areaConhecimento" HeaderText="Área de Conhecimento" />
-
                             <asp:TemplateField HeaderText="Coordenador Responsável">
                                 <ItemTemplate>
                                     <%# Eval("nomeCoordenador") %>
                                 </ItemTemplate>
                             </asp:TemplateField>
-
                             <asp:BoundField DataField="verbaAprovada" HeaderText="Verba Aprovada" DataFormatString="{0:C}" />
+                            <asp:TemplateField HeaderText="Ações">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="lbtnVerDetalhes" runat="server" CssClass="btn btn-sm btn-info text-white" CommandName="VerDetalhes" CommandArgument='<%# Eval("id") %>'                        CausesValidation="false"
+                                        UseSubmitBehavior="false">
+                                        🔍 Ver Detalhes
+                                    </asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
-
-                    <asp:Label ID="lblAvisoGrid" runat="server" Text="Nenhum Projeto na memória."
-                        CssClass="text-muted italic" Visible="false"></asp:Label>
+                    <asp:Label ID="lblAvisoGrid" runat="server" Text="Nenhum Projeto na memória." CssClass="text-muted font-italic" Visible="false">
+                    </asp:Label>
                 </div>
-
+              
+                <div class="modal fade" id="modalDetalhes" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title">📋 Detalhes Completos do Projeto
+                                </h5>
+                                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label class="font-weight-bold">
+                                            Título do Projeto:
+                                        </label>
+                                        <asp:Label ID="lblDetTitulo" runat="server" CssClass="d-block p-2 bg-light border rounded">
+                                        </asp:Label>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="font-weight-bold">
+                                            Coordenador:
+                                        </label>
+                                        <asp:Label ID="lblDetCoordenador" runat="server" CssClass="d-block p-2 bg-light border rounded">
+                                        </asp:Label>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="font-weight-bold">
+                                            Área de Conhecimento:
+                                        </label>
+                                        <asp:Label ID="lblDetArea" runat="server" CssClass="d-block p-2 bg-light border rounded">
+                                        </asp:Label>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="font-weight-bold">
+                                            Verba Total:
+                                        </label>
+                                        <asp:Label ID="lblDetVerba" runat="server" CssClass="d-block p-2 bg-light border rounded">
+                                        </asp:Label>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="font-weight-bold">
+                                            Bolsa Individual:
+                                        </label>
+                                        <asp:Label ID="lblDetBolsa" runat="server" CssClass="d-block p-2 bg-light border rounded">
+                                        </asp:Label>
+                                    </div>
+                                </div>
+                                <hr />
+                                <h6>🎓 Bolsistas Vinculados</h6>
+                                <asp:BulletedList ID="bltBolsistasDet" runat="server" DisplayMode="Text" CssClass="list-group mt-2">
+                                </asp:BulletedList>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script type="text/javascript">
+
         function esconderMensagem() {
-            $("#containerMensagem").stop(true, true).delay(3000).fadeOut(1000, function () {
 
-                $('#<%= lblMensagem.ClientID %>').text("");
+            $("#containerMensagem")
+                .stop(true, true)
+                .delay(3000)
+                .fadeOut(1000, function () {
 
-                $('#<%= lblMensagem.ClientID %>').removeClass("alert alert-success alert-danger alert-warning d-block");
+                    $('#<%= lblMensagem.ClientID %>').text("");
+
+                $('#<%= lblMensagem.ClientID %>')
+                    .removeClass("alert alert-success alert-danger alert-warning d-block");
 
                 $(this).hide().css("opacity", "1");
             });
         }
 
-        var prm = Sys.WebForms.PageRequestManager.getInstance();
-        if (prm != null) {
-            prm.add_endRequest(function (sender, e) {
-                if (document.getElementById('<%= lblMensagem.ClientID %>').innerText != "") {
-                    esconderMensagem();
-                }
-            });
-        }
     </script>
 </asp:Content>

@@ -24,9 +24,9 @@ namespace WebApplication1
         }
         private void carregarComponents()
         {
-            using(SqlConnection conn = Conexao.ObterConexao())
+            using (SqlConnection conn = Conexao.ObterConexao())
             {
-                if(conn != null)
+                if (conn != null)
                 {
                     string sqlCoordenador = @"select id, nome from Coordenador
                                               where id not in (select idCoordenador from Projeto)";
@@ -86,23 +86,23 @@ namespace WebApplication1
                 };
 
                 List<int> idsBolsistas = new List<int>();
-                foreach(ListItem item in cblBolsistas.Items)
+                foreach (ListItem item in cblBolsistas.Items)
                 {
-                    if(item.Selected)
+                    if (item.Selected)
                     {
                         idsBolsistas.Add(int.Parse(item.Value));
                     }
                 }
 
                 ProjetoDAO dao = new ProjetoDAO();
-                if(dao.Salvar(novo, idsBolsistas))
+                if (dao.Salvar(novo, idsBolsistas))
                 {
                     lblMensagem.Text = "Projeto cadastrado com sucesso!";
                     lblMensagem.CssClass = "alert alert-success d-block";
 
                     LimparCampos();
-                    carregarComponents(); 
-                    AtualizarGrid();     
+                    carregarComponents();
+                    AtualizarGrid();
 
                     ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
                 }
@@ -137,13 +137,6 @@ namespace WebApplication1
             }
             txtTitulo.Focus();
         }
-        public void btnLimpar_Click(object sender, EventArgs e)
-        {
-            LimparCampos();
-
-            lblMensagem.Text = "";
-            lblMensagem.CssClass = "";
-        }
         private void AtualizarGrid()
         {
 
@@ -161,6 +154,23 @@ namespace WebApplication1
                 lblAvisoGrid.Visible = (dt.Rows.Count == 0);
             }
         }
+
+        protected void gridProjetos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "VerDetalhes")
+            {
+                lblDetTitulo.Text = "TESTE FUNCIONANDO";
+
+                ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "PopDetalhes",
+                    "$('#modalDetalhes').modal('show');",
+                    true
+                );
+            }
+        }
+
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
             Repositorio.listaProjetos = Repositorio.listaProjetos.OrderBy(x => x.Titulo).ToList();
@@ -171,6 +181,13 @@ namespace WebApplication1
             LimparCampos();
 
             AtualizarGrid();
+
+            lblMensagem.Text = "";
+            lblMensagem.CssClass = "";
+        }
+        public void btnLimpar_Click(object sender, EventArgs e)
+        {
+            LimparCampos();
 
             lblMensagem.Text = "";
             lblMensagem.CssClass = "";
@@ -197,7 +214,7 @@ namespace WebApplication1
             {
                 lblAvisoGrid.Text = "Nenhum Projeto encontrado com esse título!";
                 lblAvisoGrid.Visible = true;
-                gridProjetos.Visible = false; 
+                gridProjetos.Visible = false;
             }
             else
             {
