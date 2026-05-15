@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using WebApplication1.Database;
 using WebApplication1.Models;
@@ -76,7 +77,41 @@ namespace WebApplication1.Persistence
                     return null;
                 }
             }
+        }
 
+        public DataTable BuscarDetalhes(int id)
+        {
+            using (SqlConnection conn = Conexao.ObterConexao())
+            {
+                if (conn == null) return null;
+
+                string sql = @"select p.titulo as Titulo,
+                                      p.areaconhecimento as AreaConhecimento, 
+                                      p.verbaAprovada as VerbaAprovada, 
+                                      p.bolsaIndividual as BolsaIndividual,
+                                      c.nome as Coordenador, 
+                                   (select string_agg(b.nome, ',')
+                                   from Bolsista b
+                                   inner join ProjetoBolsista pb on b.id = pb.idBolsista
+                                   where pb.idProjeto = p.id) as Bolsistas
+                               from Projeto p
+                               inner join Coordenador c on p.idCoordenador = c.id
+                               where p.id = @id";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+                DataTable dt = new DataTable();
+
+                try
+                {
+                    dt.Load(cmd.ExecuteReader());
+                    return dt;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
         }
     }
 }

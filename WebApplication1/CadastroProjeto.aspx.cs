@@ -129,8 +129,10 @@ namespace WebApplication1
             ddlCoordenadores.ClearSelection();
 
             if (ddlCoordenadores.Items.Count > 0)
+            {
                 ddlCoordenadores.SelectedIndex = 0;
-
+            }
+                
             foreach (ListItem item in cblBolsistas.Items)
             {
                 item.Selected = false;
@@ -159,15 +161,36 @@ namespace WebApplication1
         {
             if (e.CommandName == "VerDetalhes")
             {
-                lblDetTitulo.Text = "TESTE FUNCIONANDO";
+                int idProjeto = Convert.ToInt32(e.CommandArgument);
+                ProjetoDAO dao = new ProjetoDAO();
+                DataTable dt = dao.BuscarDetalhes(idProjeto);
 
-                ScriptManager.RegisterStartupScript(
-                    this,
-                    this.GetType(),
-                    "PopDetalhes",
-                    "$('#modalDetalhes').modal('show');",
-                    true
-                );
+                if(dt != null && dt.Rows.Count > 0)
+                {
+                    DataRow row = dt.Rows[0];
+                    lblDetTitulo.Text = row["Titulo"].ToString();
+                    lblDetArea.Text = row["AreaConhecimento"].ToString();
+                    lblDetCoordenador.Text = row["Coordenador"].ToString();
+                    lblDetVerba.Text = Convert.ToDecimal(row["VerbaAprovada"]).ToString("C");
+                    lblDetBolsa.Text = Convert.ToDecimal(row["BolsaIndividual"]).ToString("C");
+                    
+                    bltBolsistasDet.Items.Clear();
+                    string listaBolsistas = row["Bolsistas"].ToString();
+
+                    if (!String.IsNullOrEmpty(listaBolsistas))
+                    {
+                        foreach (var nome in listaBolsistas.Split(','))
+                        {
+                            bltBolsistasDet.Items.Add(new ListItem(nome.Trim()));
+                        }
+                    }
+                    else
+                    {
+                        bltBolsistasDet.Items.Add(new ListItem("Nenhum bolsista associado"));
+                    }
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "PopDetalhes", "$('#modalDetalhes').modal('show');", true);
+                }
             }
         }
 
