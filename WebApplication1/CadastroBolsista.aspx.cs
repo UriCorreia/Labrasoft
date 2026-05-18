@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
 using WebApplication1.Models;
-using WebApplication1.Persistence; // Garante que o C# ache sua classe
+using WebApplication1.Persistence;
 
 namespace WebApplication1
 {
@@ -13,7 +13,6 @@ namespace WebApplication1
                 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Na primeira vez que a página carrega, podemos querer exibir a lista 
             if (!IsPostBack)
             {
                 AtualizarGrid();
@@ -22,7 +21,6 @@ namespace WebApplication1
 
         protected void btnSalvar_Click(object sender, EventArgs e)
         {
-            // VERIFICAÇÃO DE SEGURANÇA: Se campos básicos estiverem vazios, para aqui.
             if (string.IsNullOrWhiteSpace(txtNome.Text) ||
             string.IsNullOrWhiteSpace(txtMatricula.Text) ||
             string.IsNullOrWhiteSpace(txtCPF.Text) ||
@@ -95,6 +93,8 @@ namespace WebApplication1
             {
                 gridBolsistas.DataSource = dt;
                 gridBolsistas.DataBind();
+
+                pnlFilftros.Visible = dt.Rows.Count > 0;
             }
         }
 
@@ -111,28 +111,51 @@ namespace WebApplication1
 
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
-            Repositorio.listaBolsistas = Repositorio.listaBolsistas.OrderBy(x => x.Nome).ToList();
-            AtualizarGrid();
+            BolsistaDAO dao = new BolsistaDAO();
+            DataTable dt = dao.Ordenar();
+
+            if (dt != null)
+            {
+                gridBolsistas.DataSource = dt;
+                gridBolsistas.DataBind();
+
+                if (dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhum Bolsista encontrado!";
+                    lblAvisoGrid.Visible = true;
+                    lblMensagem.Visible = false;
+
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    lblMensagem.Visible = false;
+                }
+            }
         }
 
         protected void lbtnFiltrar_Click(object sender, EventArgs e)
         {
-            var filtrados = Repositorio.listaBolsistas.Where(x => x.Sexo == "F").ToList();
+            BolsistaDAO dao = new BolsistaDAO();
+            DataTable dt = dao.FMulheres();
 
-            gridBolsistas.DataSource = filtrados;
-            gridBolsistas.DataBind();
+            if(dt != null)
+            {
+                gridBolsistas.DataSource = dt;
+                gridBolsistas.DataBind();
 
-            if (filtrados.Count == 0)
-            {
-                lblAvisoGrid.Text = "Nenhuma Bolsista encontrada!";
-                lblAvisoGrid.Visible = true;
-                lblMensagem.Visible = false;
-            }
-            else
-            {
-                lblAvisoGrid.Visible = false;
-                lblMensagem.Visible = false;
-            }
+                if (dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhuma Bolsista encontrada!";
+                    lblAvisoGrid.Visible = true;
+                    lblMensagem.Visible = false;
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    lblMensagem.Visible = false;
+                }
+            }  
         }
 
         protected void lbtnLimparFiltros_Click(object sender, EventArgs e)
@@ -143,7 +166,7 @@ namespace WebApplication1
         }
         protected void lbtnPesquisar_Click(object sender, EventArgs e)
         {
-            string pesquisado = txtPesquisa.Text;
+            string pesquisado = txtPesquisa.Text.Trim();
 
             if (string.IsNullOrEmpty(pesquisado))
             {
@@ -151,26 +174,27 @@ namespace WebApplication1
                 return;
             }
 
-            var encontrados = Repositorio.listaBolsistas
-                .Where(x => (x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                            (x.Matricula != null && x.Matricula.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0))
-                .ToList();
+            BolsistaDAO dao = new BolsistaDAO();
 
-            gridBolsistas.DataSource = encontrados;
-            gridBolsistas.DataBind();
+            DataTable dt = dao.Pesquisa(pesquisado);
 
-            if(encontrados.Count == 0)
+            if (dt != null)
             {
-                lblAvisoGrid.Text = "Nenhum Bolsista encontrado!";
-                lblAvisoGrid.Visible = true;
-                lblMensagem.Visible = false;
-            }
-            else
-            {
-                lblAvisoGrid.Visible = false;
-                lblMensagem.Visible = false;
-            }
+                gridBolsistas.DataSource = dt;
+                gridBolsistas.DataBind();
+
+                if (dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhum Bolsista encontrado!";
+                    lblAvisoGrid.Visible = true;
+                    lblMensagem.Visible = false;
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    lblMensagem.Visible = false;
+                }
+            } 
         }
-
     }
 }
