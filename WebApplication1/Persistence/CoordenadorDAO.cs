@@ -59,5 +59,52 @@ namespace WebApplication1.Persistence
                 }
             }
         }
+
+        public DataTable Ordenar()
+        {
+            using (SqlConnection conn = Conexao.ObterConexao())
+            {
+                string sql = "select id, nome, titulo, cpf, areaAtuacao, email from Coodernador order by nome";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+
+                DataTable dt = new DataTable();
+
+                try
+                {
+                    dt.Load(cmd.ExecuteReader());
+                    return dt;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public DataTable Pesquisa(string pesquisa)
+        {
+            using (SqlConnection conn = Conexao.ObterConexao())
+            {
+                if (conn == null) return null;
+
+                string sql = "select id, nome, titulo, cpf, areaAtuacao, email from Coordenador where nome like @pesquisa";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@pesquisa", "%" + pesquisa + "%");
+                    DataTable dt = new DataTable();
+
+                    try
+                    {
+                        dt.Load(cmd.ExecuteReader());
+                        return dt;
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 }

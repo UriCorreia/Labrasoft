@@ -15,7 +15,6 @@ namespace WebApplication1
         
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Na primeira vez que a página carrega, podemos querer exibir a lista 
             if (!IsPostBack)
             {
                 AtualizarGrid();
@@ -66,23 +65,7 @@ namespace WebApplication1
                 lblMensagem.CssClass = "alert alert-danger d-block";
             }
         }
-        protected void btnLimpar_Click(object sender, EventArgs e)
-        {
-            LimparCampos();
-
-            lblMensagem.Text = "";
-            lblMensagem.CssClass = "";
-        }
-
-        private void LimparCampos()
-        {
-            txtNome.Text = "";
-            txtTitulo.Text = "";
-            txtCPF.Text = "";
-            txtAreaAtuacao.Text = "";
-            txtEmail.Text = "";
-            txtNome.Focus(); 
-        }
+       
 
         private void AtualizarGrid()
         {
@@ -93,6 +76,7 @@ namespace WebApplication1
             {
                 gridCoordenadores.DataSource = dt;
                 gridCoordenadores.DataBind();
+                pnlFilftros.Visible = true;
             }
         }
 
@@ -109,19 +93,31 @@ namespace WebApplication1
 
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
-            Repositorio.listaCoordenadores = Repositorio.listaCoordenadores.OrderBy(x => x.Nome).ToList();
-            AtualizarGrid();
-        }
-            
-        protected void lbtnLimparFiltros_Click(object sender, EventArgs e)
-        {
-            txtPesquisa.Text = "";
+            CoordenadorDAO dao = new CoordenadorDAO();
+            DataTable dt = dao.Ordenar();
 
-            AtualizarGrid();
+            if(dt != null)
+            {
+                gridCoordenadores.DataSource = dt;
+                gridCoordenadores.DataBind();
+
+                if(dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhum Coordenador encontrado!";
+                    lblAvisoGrid.Visible = true;
+                    lblMensagem.Visible = false;
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    lblMensagem.Visible = false;
+                }
+            }
         }
+
         protected void lbtnPesquisar_Click(object sender, EventArgs e)
         {
-            string pesquisado = txtPesquisa.Text;
+            string pesquisado = txtPesquisa.Text.Trim();
 
             if (string.IsNullOrEmpty(pesquisado))
             {
@@ -129,25 +125,51 @@ namespace WebApplication1
                 return;
             }
 
-            var encontrados = Repositorio.listaCoordenadores
-                .Where(x => (x.Nome != null && x.Nome.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                            (x.Titulo != null && x.Titulo.IndexOf(pesquisado, StringComparison.OrdinalIgnoreCase) >= 0))
-                .ToList();
+            CoordenadorDAO dao = new CoordenadorDAO();
+            DataTable dt = dao.Pesquisa(pesquisado);
 
-            gridCoordenadores.DataSource = encontrados;
-            gridCoordenadores.DataBind();
+            if(dt != null)
+            {
+                gridCoordenadores.DataSource = dt;
+                gridCoordenadores.DataBind();
 
-            if (encontrados.Count == 0)
-            {
-                lblAvisoGrid.Text = "Nenhum Coordenador encontrado!";
-                lblAvisoGrid.Visible = true;
-                lblMensagem.Visible = false;
+                if (dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhum Coordenador encontrado!";
+                    lblAvisoGrid.Visible = true;
+                    lblMensagem.Visible = false;
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    lblMensagem.Visible = false;
+                }
             }
-            else
-            {
-                lblAvisoGrid.Visible = false;
-                lblMensagem.Visible = false;
-            }
+        }
+
+        protected void lbtnLimparFiltros_Click(object sender, EventArgs e)
+        {
+            txtPesquisa.Text = "";
+
+            AtualizarGrid();
+        }
+        
+        protected void btnLimpar_Click(object sender, EventArgs e)
+        {
+            LimparCampos();
+
+            lblMensagem.Text = "";
+            lblMensagem.CssClass = "";
+        }
+
+        private void LimparCampos()
+        {
+            txtNome.Text = "";
+            txtTitulo.Text = "";
+            txtCPF.Text = "";
+            txtAreaAtuacao.Text = "";
+            txtEmail.Text = "";
+            txtNome.Focus();
         }
     }
 }
