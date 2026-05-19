@@ -65,7 +65,7 @@
                         <div class="col-md-4">
                             <label class="form-label small font-weight-bold">Pesquisar na Lista:</label>
                             <div class="input-group">
-                                <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Nome ou Titulo"></asp:TextBox>
+                                <asp:TextBox ID="txtPesquisa" runat="server" CssClass="form-control" placeholder="Pesquise pelo Nome"></asp:TextBox>
                                 <asp:LinkButton ID="lbtnPesquisa" runat="server" CssClass="btn btn-primary" OnClick="lbtnPesquisar_Click">
                                     🔍
                                 </asp:LinkButton>

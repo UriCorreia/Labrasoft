@@ -118,27 +118,7 @@ namespace WebApplication1
                 lblMensagem.CssClass = "alert alert-danger d-block";
             }
         }
-        private void LimparCampos()
-        {
-            txtTitulo.Text = "";
-            txtAreaConhecimento.Text = "";
-            txtVerbaAprovada.Text = "";
-            txtBolsaIndividual.Text = "";
-            txtPesquisa.Text = "";
-
-            ddlCoordenadores.ClearSelection();
-
-            if (ddlCoordenadores.Items.Count > 0)
-            {
-                ddlCoordenadores.SelectedIndex = 0;
-            }
-                
-            foreach (ListItem item in cblBolsistas.Items)
-            {
-                item.Selected = false;
-            }
-            txtTitulo.Focus();
-        }
+        
         private void AtualizarGrid()
         {
 
@@ -154,6 +134,7 @@ namespace WebApplication1
 
                 gridProjetos.Visible = true;
                 lblAvisoGrid.Visible = (dt.Rows.Count == 0);
+                pnlFilftros.Visible = true;
             }
         }
 
@@ -196,8 +177,58 @@ namespace WebApplication1
 
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
-            Repositorio.listaProjetos = Repositorio.listaProjetos.OrderBy(x => x.Titulo).ToList();
-            AtualizarGrid();
+            ProjetoDAO dao = new ProjetoDAO();
+            DataTable dt = dao.Ordenar();
+
+            if(dt != null)
+            {
+                gridProjetos.DataSource = dt;
+                gridProjetos.DataBind();
+
+                if(dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhum Coordenador encontrado!";
+                    lblAvisoGrid.Visible = true;
+                    lblMensagem.Visible = false;
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    lblMensagem.Visible = false;
+                }
+            }
+        }
+
+        protected void lbtnPesquisa_Click(object sender, EventArgs e)
+        {
+            var pesquisado = txtPesquisa.Text.Trim();
+
+            if (string.IsNullOrEmpty(pesquisado))
+            {
+                AtualizarGrid();
+                return;
+            }
+
+            ProjetoDAO dao = new ProjetoDAO();
+            DataTable dt = dao.Pesquisa(pesquisado);
+
+            if(dt != null)
+            {
+                gridProjetos.DataSource = dt;
+                gridProjetos.DataBind();
+
+                if (dt.Rows.Count == 0)
+                {
+                    lblAvisoGrid.Text = "Nenhum Projeto encontrado com esse título!";
+                    lblAvisoGrid.Visible = true;
+                    gridProjetos.Visible = false;
+                }
+                else
+                {
+                    lblAvisoGrid.Visible = false;
+                    gridProjetos.Visible = true;
+                }
+            }
         }
         protected void lbtnLimparFiltro_Click(object sender, EventArgs e)
         {
@@ -215,35 +246,27 @@ namespace WebApplication1
             lblMensagem.Text = "";
             lblMensagem.CssClass = "";
         }
-        protected void lbtnPesquisa_Click(object sender, EventArgs e)
+        private void LimparCampos()
         {
-            var pesquisado = txtPesquisa.Text.Trim();
+            txtTitulo.Text = "";
+            txtAreaConhecimento.Text = "";
+            txtVerbaAprovada.Text = "";
+            txtBolsaIndividual.Text = "";
+            txtPesquisa.Text = "";
 
-            if (string.IsNullOrEmpty(pesquisado))
+            ddlCoordenadores.ClearSelection();
+
+            if (ddlCoordenadores.Items.Count > 0)
             {
-                AtualizarGrid();
-                return;
+                ddlCoordenadores.SelectedIndex = 0;
             }
 
-            var encontrados = Repositorio.listaProjetos
-                .Where(p => (p.Titulo.ToLower().Contains(pesquisado.ToLower())) ||
-                            (p.CoordenadorResponsavel.Nome.ToLower().Contains(pesquisado.ToLower())))
-                .ToList();
-
-            gridProjetos.DataSource = encontrados;
-            gridProjetos.DataBind();
-
-            if (encontrados.Count == 0)
+            foreach (ListItem item in cblBolsistas.Items)
             {
-                lblAvisoGrid.Text = "Nenhum Projeto encontrado com esse título!";
-                lblAvisoGrid.Visible = true;
-                gridProjetos.Visible = false;
+                item.Selected = false;
             }
-            else
-            {
-                lblAvisoGrid.Visible = false;
-                gridProjetos.Visible = true;
-            }
+            txtTitulo.Focus();
         }
+        
     }
 }

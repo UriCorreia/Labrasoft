@@ -113,5 +113,52 @@ namespace WebApplication1.Persistence
                 }
             }
         }
+
+        public DataTable Ordenar()
+        {
+            using (SqlConnection conn = Conexao.ObterConexao())
+            {
+                string sql = "select p.id, p.titulo, p.areaConhecimento, p.verbaAprovada, c.nome as nomeCoordenador from Projeto p " +
+                             "inner join Coordenador c on p.idCoordenador = c.id order by p.titulo";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                DataTable dt = new DataTable();
+
+                try
+                {
+                    dt.Load(cmd.ExecuteReader());
+                    return dt;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public DataTable Pesquisa(string pesquisa)
+        {
+            using (SqlConnection conn = Conexao.ObterConexao())
+            {
+                string sql = "select p.id, p.titulo, p.areaConhecimento, p.verbaAprovada, c.nome as nomeCoordenador from Projeto p " +
+                             "inner join Coordenador c on p.idCoordenador = c.id " +
+                             "where p.titulo like @pesquisa";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Pesquisa", "%" + pesquisa + "%");
+                    DataTable dt = new DataTable();
+
+                    try
+                    {
+                        dt.Load(cmd.ExecuteReader());
+                        return dt;
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 }
