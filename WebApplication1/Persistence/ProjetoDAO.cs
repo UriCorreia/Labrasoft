@@ -55,6 +55,41 @@ namespace WebApplication1.Persistence
             }
         }
 
+        public bool Excluir(int id)
+        { // OBS: Excluir um Projeto envolve excluir os vínculos com os bolsistas, por isso a transação
+
+            using (SqlConnection conn = Conexao.ObterConexao())
+            {
+                if (conn == null) return false;
+
+                SqlTransaction trans = conn.BeginTransaction();
+
+                try
+                {
+                    string sqlVinculo = @"delete from ProjetoBolsista where idProjeto = @id";
+                    using (SqlCommand cmd = new SqlCommand(sqlVinculo, conn, trans))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string sqlDProjeto = @"delete from Projeto where id = @id";
+                    using (SqlCommand cmd = new SqlCommand(sqlDProjeto, conn, trans))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    trans.Commit();
+                    return true;
+                } catch (Exception)
+                {
+                    trans.Rollback();
+                    return false;
+                }
+            }
+        }
+
         public DataTable Listar()
         {
             using (SqlConnection conn = Conexao.ObterConexao())

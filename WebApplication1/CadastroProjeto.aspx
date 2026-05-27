@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CadastroProjeto.aspx.cs" Inherits="WebApplication1.CadastroProjeto" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link href="CSS/CadastroProjeto.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container mt-5">
@@ -119,7 +120,8 @@
                     <asp:Label ID="lblAvisoGrid" runat="server" Text="Nenhum Projeto na memória." CssClass="text-muted font-italic" Visible="false">
                     </asp:Label>
                 </div>
-              
+
+                <asp:HiddenField ID="hfProjetoSelecionado" runat="server" />
                 <div class="modal fade" id="modalDetalhes" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
@@ -174,9 +176,20 @@
                                 </asp:BulletedList>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                    Fechar
-                                </button>
+                                <div class="menu-acoes-hover mr-3">
+                                    <button type="button" class="btn btn-light btn-sm rounded-circle shadow-sm font-weight-bold">
+                                        Opções de projeto
+                                    </button>
+                                    <div class="menu-opcoes shadow">
+                                        <asp:LinkButton ID="lbtnEditarModal" runat="server" CssClass="dropdown-item text-secondary py-2" CausesValidation="false">
+                                            Editar
+                                        </asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExcluirModal" runat="server" CssClass="dropdown-item text-danger py-2 font-weight-bold" OnCLick="lbtnExcluir_Click" CausesValidation="false">
+                                            Excluir
+                                        </asp:LinkButton>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,36 @@
+﻿/* Container do menu */
+.menu-acoes-hover {
+    position: relative;
+    display: inline-block;
+}
+
+/* Caixa de opções (inicialmente escondida e transparente) */
+.menu-opcoes {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 1050; /* Garante que fica por cima de tudo no modal */
+    background-color: #ffffff;
+    min-width: 160px;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(0,0,0,.15);
+    /* Efeito de transição suave */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+/* MÁGICA DO HOVER: Quando passa o mouse no container, revela as opções */
+.menu-acoes-hover:hover .menu-opcoes {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(5px);
+}
+
+/* Ajuste visual para os itens do menu */
+.menu-opcoes .dropdown-item:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}

@@ -59,7 +59,6 @@ namespace WebApplication1
                 }
             }
         }
-
         public void btnSalvar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTitulo.Text) ||
@@ -100,8 +99,9 @@ namespace WebApplication1
                     lblMensagem.Text = "Projeto cadastrado com sucesso!";
                     lblMensagem.CssClass = "alert alert-success d-block";
 
-                    LimparCampos();
                     carregarComponents();
+                    LimparCampos();
+
                     AtualizarGrid();
 
                     ClientScript.RegisterStartupScript(this.GetType(), "HideLabel", "esconderMensagem();", true);
@@ -118,7 +118,25 @@ namespace WebApplication1
                 lblMensagem.CssClass = "alert alert-danger d-block";
             }
         }
-        
+        public void lbtnExcluir_Click(object sender, EventArgs e)
+        {
+            int idProjeto = int.Parse(hfProjetoSelecionado.Value);
+            ProjetoDAO dao = new ProjetoDAO();
+            if (dao.Excluir(idProjeto))
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "FecharModal", "$('#modalDetalhes').modal('hide');", true);
+
+                AtualizarGrid();
+
+                lblMensagem.Text = "Projeto Excluído com Sucesso!";
+                lblMensagem.CssClass = "alert alert-success d-block";
+            }
+            else
+            {
+                lblMensagem.Text = "Erro ao excluir o projeto.";
+                lblMensagem.CssClass = "alert alert-danger d-block";
+            }
+        }
         private void AtualizarGrid()
         {
 
@@ -137,12 +155,12 @@ namespace WebApplication1
                 pnlFilftros.Visible = true;
             }
         }
-
         protected void gridProjetos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "VerDetalhes")
             {
                 int idProjeto = Convert.ToInt32(e.CommandArgument);
+                hfProjetoSelecionado.Value = idProjeto.ToString();
                 ProjetoDAO dao = new ProjetoDAO();
                 DataTable dt = dao.BuscarDetalhes(idProjeto);
 
@@ -174,7 +192,6 @@ namespace WebApplication1
                 }
             }
         }
-
         protected void lbtnOrdenar_Click(object sender, EventArgs e)
         {
             ProjetoDAO dao = new ProjetoDAO();
@@ -198,7 +215,6 @@ namespace WebApplication1
                 }
             }
         }
-
         protected void lbtnPesquisa_Click(object sender, EventArgs e)
         {
             var pesquisado = txtPesquisa.Text.Trim();
